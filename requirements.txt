@@ -4,3 +4,5 @@ coincbc
 ipopt
 glpk
 black
+pandas
+matplotlib
