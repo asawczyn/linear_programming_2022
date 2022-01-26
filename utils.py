@@ -1,5 +1,34 @@
 from matplotlib import pyplot as plt
 
+import networkx as nx
+
+
+def plot_graph_cut(x, edges):
+    G = nx.Graph()
+    node_color_map = []
+    for node_id, node_type in x.items():
+        G.add_node(node_id)
+        node_color_map.append("yellow" if node_type else "lightgreen")
+
+    for node_i, node_j in edges:
+        color = "black" if x[node_i] == x[node_j] else "red"
+        G.add_edge(node_i, node_j, color=color)
+
+    nx.draw(G, with_labels=True, font_weight="bold")
+    plt.savefig("output/graph_cut_1.png")
+
+    plt.show()
+    edge_color_map = [G[u][v]["color"] for u, v in G.edges()]
+    nx.draw(
+        G,
+        node_color=node_color_map,
+        edge_color=edge_color_map,
+        with_labels=True,
+        font_weight="bold",
+    )
+    plt.savefig("output/graph_cut_2.png")
+    plt.show()
+
 
 def plot_gant(df):
     MAX_TIME = 12
@@ -39,5 +68,5 @@ def plot_gant(df):
                 size=8,
             )
 
-    plt.savefig("job_shop_gant.png")
+    plt.savefig("output/job_shop_gant.png")
     plt.show()

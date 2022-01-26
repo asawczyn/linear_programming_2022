@@ -6,3 +6,4 @@ glpk
 black
 pandas
 matplotlib
+networkx
