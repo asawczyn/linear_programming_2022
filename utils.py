@@ -1,3 +1,6 @@
+import operator
+
+import pandas as pd
 from matplotlib import pyplot as plt
 
 import networkx as nx
@@ -70,3 +73,14 @@ def plot_gant(df):
 
     plt.savefig("output/job_shop_gant.png")
     plt.show()
+
+
+def convert_output_to_dataframe(data, i):
+    df = pd.DataFrame()
+    df["i,j"] = data[None]["m"].keys()
+    df["job"] = df["i,j"].map(operator.itemgetter(0))
+    df["operation"] = df["i,j"].map(operator.itemgetter(1))
+    df["processing_time"] = data[None]["p"].values()
+    df["machine"] = data[None]["m"].values()
+    df["starting_time"] = df["i,j"].map(i.s.get_values()).astype(int)
+    return df

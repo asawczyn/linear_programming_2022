@@ -46,10 +46,12 @@ data = {
 }
 
 i = model.create_instance(data)
-
-pyo.SolverFactory("glpk").solve(i).write()
+print("----Model----")
 i.pprint()
 
+pyo.SolverFactory("glpk").solve(i)
+
+print("----Solution----")
 print("Cost = ", i.cost())
 print("x = ", i.x.get_values())
 print("y = ", i.y.get_values())

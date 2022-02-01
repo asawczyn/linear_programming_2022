@@ -36,15 +36,12 @@ data = {
     }
 }
 i = model.create_instance(data)
+print("----Model----")
 i.pprint()
 
-solutions = pyo.SolverFactory("glpk").solve(i)  # .write()
-i.solutions.store_to(solutions)
-print(solutions)
-i.display()
-i.pprint()
-print(i.z())
-print(i.x.get_values())
-print(i.y.get_values())
-
+solutions = pyo.SolverFactory("glpk").solve(i)
+print("----Solution----")
+print(f"z = {i.z()}")
+print(f"x = {i.x.get_values()}")
+print(f"y = {i.y.get_values()}")
 plot_graph_cut(i.x.get_values(), i.E)

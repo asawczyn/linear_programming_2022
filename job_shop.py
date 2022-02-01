@@ -5,12 +5,10 @@
 # {M1 , . . . , Mm } and its processing time equals pij . We seek a schedule whose
 # makespan (the completion time of the last job) is minimal.
 
-import pandas as pd
 import pyomo.environ as pyo
 import pyomo.gdp as pyo_gdp
-import operator
 
-from utils import plot_gant
+from utils import plot_gant, convert_output_to_dataframe
 
 model = pyo.AbstractModel()
 
@@ -96,23 +94,14 @@ data = {
 
 
 i = model.create_instance(data)
-i.pprint()
+# print("----Model----") # model's output is too long -> skipped
+# i.pprint()
 pyo.TransformationFactory("gdp.hull").apply_to(i)
-i.pprint()
-pyo.SolverFactory("glpk").solve(i).write()
+pyo.SolverFactory("glpk").solve(i)
 
-df = pd.DataFrame()
-df["i,j"] = data[None]["m"].keys()
-df["job"] = df["i,j"].map(operator.itemgetter(0))
-df["operation"] = df["i,j"].map(operator.itemgetter(1))
-df["processing_time"] = data[None]["p"].values()
-df["machine"] = data[None]["m"].values()
-df["starting_time"] = df["i,j"].map(i.s.get_values())
-
-print("\n")
-print(df)
-print("\n")
+print("----Solution----")
+df = convert_output_to_dataframe(data, i)
 print("Cost = ", i.cost())
-print("s = ", i.s.get_values())
+print(df)
 
 plot_gant(df)
